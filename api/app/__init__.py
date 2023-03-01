@@ -1,9 +1,11 @@
 import os
-from flask import Flask, request, send_from_directory
+import io
+from flask import Flask, request, send_from_directory, send_file, after_this_request
 from werkzeug.utils import secure_filename
 import json
 import torch
 from torchvision.utils import save_image
+from PIL import Image
 from .model.net import CDLNet
 from .model.utils import img_load
 from .model.nle import noise_level
@@ -66,7 +68,13 @@ def create_app(test_config=None):
     
         image_p = predict(os.path.join(app.config['UPLOAD_FOLDER'],app.config['IMG_NAME']))
         save_image(image_p,os.path.join(app.instance_path,app.config['RESULT_FOLDER'],'p_'+app.config['IMG_NAME']))
+        os.remove(os.path.join(app.config['UPLOAD_FOLDER'],app.config['IMG_NAME']))        
 
         return send_from_directory(app.config['RESULT_FOLDER'], 'p_'+app.config['IMG_NAME'])
+
+    @app.route('/delete')
+    def delete_image():
+        os.remove(os.path.join(app.instance_path,app.config['RESULT_FOLDER'],'p_'+app.config['IMG_NAME']))
+        return ('',204)
 
     return app

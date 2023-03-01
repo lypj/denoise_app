@@ -61,6 +61,7 @@ class App extends React.Component {
     const imageBlob = await res.blob();
     const imageObjectURL = URL.createObjectURL(imageBlob);
     this.setState({resultImage : imageObjectURL});
+    fetch("/delete");
   };
 
   render()
