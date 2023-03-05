@@ -25,7 +25,7 @@ class SelectFile extends React.Component {
         <button onClick={()=>
             this.props.selectorRef.current.click()
           }>
-          <a>Select file</a>
+          Select file
         </button>
       </div>
     );
@@ -70,11 +70,11 @@ class App extends React.Component {
       <div className="App">
 
         <div className="ImageBox">
-          <img src={this.state.uploadedImage}></img>
+          <img src={this.state.uploadedImage} alt=""></img>
         </div>
 
         <div className="Function">
-          <a> Denoise </a>
+          <h1> Denoise </h1>
           <img src={logo} className="App-logo" alt="logo" />
 
           <SelectFile 
@@ -83,12 +83,12 @@ class App extends React.Component {
           />
 
           <button onClick={this.fetchImage}>
-            <a>Process</a>
+            Process
           </button>          
         </div>
 
         <div className="ImageBox">
-          <img src={this.state.resultImage} ></img>
+          <img src={this.state.resultImage} alt=""></img>
         </div>
 
       </div>

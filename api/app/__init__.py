@@ -1,6 +1,6 @@
 import os
 import io
-from flask import Flask, request, send_from_directory, send_file, after_this_request
+from flask import Flask, request, send_from_directory
 from werkzeug.utils import secure_filename
 import json
 import torch
@@ -14,7 +14,7 @@ from .model.nle import noise_level
 
 def create_app(test_config=None):
     
-    app = Flask(__name__,instance_relative_config=True)
+    app = Flask(__name__, static_folder='../build', static_url_path='/')
 
     app.config.from_mapping(
         SECRET_KEY = 'dev',
@@ -31,7 +31,6 @@ def create_app(test_config=None):
         os.mkdir(app.config['RESULT_FOLDER'])
     except OSError:
         pass
-
 
     args_file = open(os.path.join('trained_nets/CDLNet_Color/args.json'))
     args = json.load(args_file)
@@ -76,5 +75,9 @@ def create_app(test_config=None):
     def delete_image():
         os.remove(os.path.join(app.instance_path,app.config['RESULT_FOLDER'],'p_'+app.config['IMG_NAME']))
         return ('',204)
+    
+    @app.route('/')
+    def index():
+        return app.send_static_file('index.html')
 
     return app

@@ -10,11 +10,16 @@
 
 # production
 /build
+build/
 
 #flask
 instance/
 venv/
 __pycache__/
+
+#docker
+Dockerfile
+.dockerignore
 
 # misc
 .DS_Store
@@ -23,6 +28,7 @@ __pycache__/
 .env.test.local
 .env.production.local
 
+yarn.lock
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
