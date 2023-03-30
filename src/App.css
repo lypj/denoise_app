@@ -4,7 +4,8 @@
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 35vmin;
+  max-width:90%;
   pointer-events: none;
 }
 
@@ -21,6 +22,57 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.Function h1 {
+  max-width:80%;
+  width: auto;
+  font-size: 140%;
+}
+
+.Function .about {
+  font-size: 50%;
+  text-decoration: underline; 
+  margin-top: 15%;
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+  z-index: 100;
+}
+
+.Function .about:hover {
+  color: lightblue;
+}
+
+.Function .aboutContent {
+  position: absolute;
+  top: 0%;
+  border: none;
+  width: 30%;
+  height: 100%;
+  display: flex;
+  background-color: #282c34;
+  color: rgb(255, 255, 255);
+}
+
+.aboutContentPanel {
+  position: relative;
+  top: 25%;
+  width: 80%;
+  height: 50%;
+  margin: auto;
+  background-color: #282c34;
+}
+
+.aboutContentPanel div {
+  font-size: calc(6px + 1vmin);
+  text-align: left;
+  width: 100%;
+  text-indent:4em;
+  word-wrap: break-word;
+  margin-top: 6%;
 }
 
 .hidden {
@@ -40,12 +92,20 @@
   max-height:90%;
   width: auto;
   height: auto;
+  z-index: 1;
+}
+
+#processing {
+  z-index: 2;
+  max-width:60%;
+  max-height:60%;
 }
 
 .Function {
   width: 30%;
   background-color: #282c34;
   min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

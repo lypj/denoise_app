@@ -41,40 +41,63 @@ class App extends React.Component {
       handleSelectFile : this.handleSelectFile.bind(this),
       uploadedImage: null,
       resultImage: null,
-      processingImage: null
+      processingImage: false,
+      showabout: false
     };
   }
   
   handleSelectFile(file) {
-    const formData = new FormData();
-    formData.append('file', file);
-    fetch('/upload',{
-      method : 'POST',
-      body : formData
-    })
-    this.setState({uploadedImage: URL.createObjectURL(file)});
+
+    var filename = file.name;
+    if(filename.endsWith('.png') || filename.endsWith('.jpg') 
+      || filename.endsWith('.jpeg'))
+      this.setState({uploadedImage: file});
+    else
+      alert('Accepted formats: png jpg jpeg');
+    
   }
 
   fetchImage = async () => {
-    this.setState({resultImage : processing});
-    const res = await fetch("/process");
-    const imageBlob = await res.blob();
-    const imageObjectURL = URL.createObjectURL(imageBlob);
-    this.setState({resultImage : imageObjectURL});
-    fetch("/delete");
+    await this.setState({processingImage : true});
+    const formData = new FormData();
+    formData.append('file', this.state.uploadedImage);
+    const res = await fetch('/process',{
+      method : 'POST',
+      body : formData
+    })
+    if(!res.ok){
+      window.location.reload();
+    }
+    else{
+      if(res.headers.get('error')==='OK'){
+        const imageBlob = await res.blob();
+        const imageObjectURL = URL.createObjectURL(imageBlob);
+        this.setState({resultImage : imageObjectURL});
+        await fetch("/delete");
+        this.setState({processingImage : false});
+      }
+      else if(res.headers.get('error')==='File being processed'){
+        alert(res.headers.get('error'));
+        this.setState({processingImage : true});
+      }
+      else{
+        alert(res.headers.get('error'));
+        this.setState({processingImage : false});
+      }
+    }
   };
 
   render()
   {
     return (
       <div className="App">
-
         <div className="ImageBox">
-          <img src={this.state.uploadedImage} alt=""></img>
+          <img src={this.state.uploadedImage ? URL.createObjectURL(this.state.uploadedImage) : null} alt=""></img>
         </div>
 
         <div className="Function">
-          <h1> Denoise </h1>
+
+          <h1>Denoise</h1>
           <img src={logo} className="App-logo" alt="logo" />
 
           <SelectFile 
@@ -84,11 +107,32 @@ class App extends React.Component {
 
           <button onClick={this.fetchImage}>
             Process
-          </button>          
+          </button> 
+  
+          <div className="aboutContent" 
+            style={{ display: this.state.showabout ? "block" : "none" }}>
+              <div className="aboutContentPanel">
+                <div>React + Flask + PyTorch App</div>
+                <div>Gaussian noise removal</div>
+                <div>For more information</div>
+                <div>on the deep learning model, visit:</div>
+                <div>https://github.com/nikopj/CDLNet-OJSP</div>
+                <div>File should be .png .jpg or .jpeg</div>
+                <div>File should be less than 1MB</div>
+              </div>
+          </div>
+
+          <p className="about" 
+            onClick={()=>{this.setState({showabout : !this.state.showabout})}}> 
+              about 
+          </p>  
         </div>
 
         <div className="ImageBox">
-          <img src={this.state.resultImage} alt=""></img>
+          <img src={processing} id="processing" 
+          style={{ display: this.state.processingImage ? "block" : "none" }} alt="" ></img>
+          <img src={this.state.resultImage} 
+          style={{ display: this.state.processingImage ? "none" : "block" }} alt=""></img>
         </div>
 
       </div>

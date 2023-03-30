@@ -2,7 +2,7 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 from scipy.stats import gamma
-from .wvlt import filter_bank_2D
+from app.model.wvlt import filter_bank_2D
 
 def noise_level(y, method="MAD", **kwargs):
     if method in [True, "MAD", "wvlt"]:

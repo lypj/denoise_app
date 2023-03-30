@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS files;
+
+CREATE TABLE files(
+    filename TEXT PRIMARY KEY,
+    status INTEGER NOT NULL
+);

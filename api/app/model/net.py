@@ -3,9 +3,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import gc
 
-from .solvers import power_method, uball_project
-from .utils   import pre_process, post_process
+from app.model.solvers import power_method, uball_project
+from app.model.utils   import pre_process, post_process
 
 def ST(x,t):
     """ shrinkage-thresholding operation. 
@@ -83,13 +84,14 @@ class CDLNet(nn.Module):
 
         # LISTA
         z = ST(self.A[0](yp), self.t[0,:1] + c*self.t[0,1:2])
+
         for k in range(1, self.K):
             z = ST(z - self.A[k](mask*self.B[k](z) - yp), self.t[k,:1] + c*self.t[k,1:2])
 
         # DICTIONARY SYNTHESIS
         xphat = self.D(z)
         xhat  = post_process(xphat, params)
-        return xhat, z
+        return xhat
 
     def forward_generator(self, y, sigma=None, mask=1):
         """ same as forward but yeilds intermediate sparse codes

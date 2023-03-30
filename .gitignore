@@ -9,17 +9,22 @@
 /coverage
 
 # production
-/build
 build/
 
 #flask
+requirements_windows.txt
 instance/
 venv/
 __pycache__/
+*.sqlite
 
 #docker
 Dockerfile
 .dockerignore
+
+#AWS
+containers.json
+public-endpoint.json
 
 # misc
 .DS_Store
